@@ -1,0 +1,46 @@
+Vagrant.configure("2") do |config|
+  #config.vm.synced_folder "C:\\Users\\jtarleton\\vagrant", "/var/winroot"
+  #config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "192.168.33.10"
+  #config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.define "weblocal" do |weblocal|
+    weblocal.vm.box = "ubuntu/precise64"
+    weblocal.vm.synced_folder "C:\\Users\\jtarleton\\vagrant_www", "/var/winroot"
+    weblocal.vm.synced_folder "C:\\Users\\jtarleton\\vagrant_web\\home\\jtarleton\\tmp", "/home/jtarleton/tmp"
+    weblocal.vm.network "private_network", ip:"192.168.33.10"
+    weblocal.vm.hostname = "weblocal"
+    weblocal.vm.provider :virtualbox do |vb|
+       vb.name = "weblocal"
+    end
+  end
+
+  config.vm.define "web2local" do |web2local|
+    web2local.vm.box = "ubuntu/precise64"
+    web2local.vm.synced_folder "C:\\Users\\jtarleton\\vagrant_www2", "/var/winroot"
+    web2local.vm.network "private_network", ip:"192.168.33.12"
+    web2local.vm.hostname = "web2local"
+    web2local.vm.provider :virtualbox do |vb|
+       vb.name = "web2local"
+    end
+  end
+
+  config.vm.define "web3local" do |web3local|
+    web3local.vm.box = "ubuntu/precise64"
+    web3local.vm.synced_folder "C:\\Users\\jtarleton\\vagrant_www3", "/var/winroot"
+    web3local.vm.network "private_network", ip:"192.168.33.13"
+    web3local.vm.hostname = "web3local"
+    web3local.vm.provider :virtualbox do |vb|
+       vb.name = "web3local"
+    end
+  end
+
+  config.vm.define "dblocal" do |dblocal|
+    dblocal.vm.box = "ubuntu/precise64"
+    dblocal.vm.synced_folder "C:\\Users\\jtarleton\\vagrant_db", "/var/winroot"
+    dblocal.vm.network "forwarded_port", guest: 3306, host: 3306
+    dblocal.vm.network "private_network", ip:"192.168.33.11"
+    dblocal.vm.hostname = "dblocal"
+    dblocal.vm.provider :virtualbox do |vb|
+        vb.name = "dblocal"
+    end
+  end
+end
